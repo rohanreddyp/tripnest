@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Welcome</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+
+/* animated background */
+body::before,
+body::after{
+    content:"";
+    position:absolute;
+    width:420px;
+    height:420px;
+    border-radius:50%;
+    filter:blur(70px);
+    opacity:.35;
+    animation:float 8s infinite ease-in-out;
+}
+
+body::before{
+    background:#fff;
+    top:-80px;
+    left:-80px;
+}
+
+body::after{
+    background:#fde68a;
+    bottom:-100px;
+    right:-80px;
+    animation-delay:2s;
+}
+
+.container{
+    width:90%;
+    max-width:520px;
+    text-align:center;
+    padding:50px 35px;
+    border-radius:35px;
+    background:rgba(255,255,255,.14);
+    backdrop-filter:blur(25px);
+    border:1px solid rgba(255,255,255,.2);
+    box-shadow:0 25px 60px rgba(0,0,0,.15);
+    color:white;
+    position:relative;
+    z-index:10;
+    animation:fadeUp 1.2s ease;
+}
+
+.logo-wrap{
+    width:150px;
+    height:150px;
+    margin:auto;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:rgba(255,255,255,.18);
+    border:2px solid rgba(255,255,255,.22);
+    box-shadow:0 0 40px rgba(255,255,255,.2);
+    animation:pulse 2.5s infinite;
+}
+
+.logo-wrap i{
+    font-size:60px;
+}
+
+h1{
+    margin-top:28px;
+    font-size:56px;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.tagline{
+    margin-top:14px;
+    font-size:17px;
+    line-height:1.8;
+    opacity:.95;
+}
+
+.features{
+    margin-top:30px;
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.feature-pill{
+    padding:10px 18px;
+    border-radius:30px;
+    background:rgba(255,255,255,.15);
+    font-size:14px;
+    border:1px solid rgba(255,255,255,.15);
+}
+
+.loader{
+    width:260px;
+    height:8px;
+    margin:38px auto 0;
+    border-radius:20px;
+    background:rgba(255,255,255,.2);
+    overflow:hidden;
+}
+
+.loader span{
+    display:block;
+    width:40%;
+    height:100%;
+    background:white;
+    border-radius:20px;
+    animation:load 2s linear infinite;
+}
+
+.loading-text{
+    margin-top:16px;
+    font-size:14px;
+    opacity:.9;
+    letter-spacing:.5px;
+}
+
+@keyframes load{
+    from{
+        transform:translateX(-120%);
+    }
+    to{
+        transform:translateX(340%);
+    }
+}
+
+@keyframes pulse{
+    0%,100%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.08);
+    }
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-35px);
+    }
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@media(max-width:600px){
+    h1{
+        font-size:40px;
+    }
+
+    .tagline{
+        font-size:15px;
+    }
+
+    .logo-wrap{
+        width:120px;
+        height:120px;
+    }
+
+    .logo-wrap i{
+        font-size:48px;
+    }
+
+    .loader{
+        width:100%;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="logo-wrap">
+        <i class="fa-solid fa-earth-asia"></i>
+    </div>
+
+    <h1>TripNest</h1>
+
+    <p class="tagline">
+        Plan smarter journeys • Explore amazing destinations • Travel beautifully
+    </p>
+
+    <div class="features">
+        <div class="feature-pill">Hotels</div>
+        <div class="feature-pill">Packages</div>
+        <div class="feature-pill">Maps</div>
+        <div class="feature-pill">Budget</div>
+    </div>
+
+    <div class="loader">
+        <span></span>
+    </div>
+
+    <p class="loading-text">
+        Preparing your travel world...
+    </p>
+
+</div>
+
+<script>
+setTimeout(()=>{
+    window.location.href="home.html";
+},2800);
+</script>
+
+</body>
+</html>

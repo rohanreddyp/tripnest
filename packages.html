@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Packages</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#f8fafc;color:#111827;}
+.topbar{
+    padding:18px 8%;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.logo{font-size:28px;font-weight:700;}
+.back{
+    text-decoration:none;
+    background:white;
+    color:#111827;
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:600;
+}
+.hero{
+    margin:35px 8%;
+    border-radius:35px;
+    padding:50px;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.hero h1{font-size:48px;margin-bottom:10px;}
+.hero p{font-size:18px;line-height:1.8;}
+.grid{
+    margin:40px 8%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+}
+.card{
+    background:white;
+    border-radius:28px;
+    padding:30px;
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+    position:relative;
+    transition:.3s;
+}
+.card:hover{
+    transform:translateY(-8px);
+}
+.badge{
+    position:absolute;
+    top:20px;
+    right:20px;
+    padding:8px 14px;
+    border-radius:20px;
+    color:white;
+    font-size:12px;
+    font-weight:700;
+}
+.budget{background:#10b981;}
+.premium{background:#2563eb;}
+.luxury{background:#ec4899;}
+
+.icon{
+    width:75px;
+    height:75px;
+    border-radius:22px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:28px;
+    color:white;
+    margin-bottom:20px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+}
+
+.card h3{
+    margin-bottom:10px;
+    font-size:28px;
+}
+
+.price{
+    font-size:34px;
+    font-weight:800;
+    color:#2563eb;
+    margin-bottom:15px;
+}
+
+.features{
+    color:#64748b;
+    line-height:2;
+    margin-bottom:22px;
+}
+
+.btn{
+    display:inline-block;
+    text-decoration:none;
+    padding:12px 22px;
+    border-radius:14px;
+    color:white;
+    font-weight:600;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+}
+
+.empty{
+    margin:80px 8%;
+    text-align:center;
+    color:#64748b;
+    font-size:20px;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="logo">TripNest</div>
+    <a href="dashboard.html" class="back">Back</a>
+</div>
+
+<section class="hero">
+    <h1 id="title">Travel Packages</h1>
+    <p id="subtitle">
+        Choose your perfect travel package.
+    </p>
+</section>
+
+<div class="grid" id="grid"></div>
+<div class="empty" id="empty" style="display:none;">
+    Create a trip first to unlock smart packages ✨
+</div>
+
+<script>
+const destination =
+localStorage.getItem("selectedDestination");
+
+const grid =
+document.getElementById("grid");
+
+if(!destination){
+    document.getElementById("empty").style.display="block";
+}else{
+
+    document.getElementById("title").innerText =
+    `${destination} Packages`;
+
+    document.getElementById("subtitle").innerText =
+    `Handpicked packages for ${destination}`;
+
+    const basePrices = {
+        Goa: [15000,32000,65000],
+        Manali: [18000,35000,70000],
+        Kashmir: [22000,42000,85000],
+        Jaipur: [14000,30000,60000],
+        Kerala: [20000,39000,78000],
+        Maldives: [45000,90000,180000],
+        Dubai: [35000,70000,150000],
+        Paris: [60000,120000,240000],
+        Switzerland: [75000,150000,300000],
+        Bali: [30000,65000,125000],
+        Tokyo: [70000,135000,260000],
+        Singapore: [45000,85000,170000]
+    };
+
+    const prices =
+    basePrices[destination] || [18000,36000,72000];
+
+    const packages = [
+        {
+            name:"Budget Explorer",
+            price:prices[0],
+            badge:"BUDGET",
+            class:"budget",
+            icon:"fa-wallet",
+            features:[
+                "3 Days / 2 Nights",
+                "Standard Hotel Stay",
+                "Breakfast Included",
+                "Sightseeing",
+                "Airport Pickup"
+            ]
+        },
+        {
+            name:"Premium Escape",
+            price:prices[1],
+            badge:"PREMIUM",
+            class:"premium",
+            icon:"fa-gem",
+            features:[
+                "5 Days / 4 Nights",
+                "Premium Hotel",
+                "Breakfast + Dinner",
+                "Guided Tours",
+                "Activities Included"
+            ]
+        },
+        {
+            name:"Luxury Signature",
+            price:prices[2],
+            badge:"LUXURY",
+            class:"luxury",
+            icon:"fa-crown",
+            features:[
+                "7 Days / 6 Nights",
+                "Luxury Resort",
+                "All Meals Included",
+                "Private Transfers",
+                "VIP Experiences"
+            ]
+        }
+    ];
+
+    packages.forEach(pkg=>{
+        grid.innerHTML += `
+            <div class="card">
+
+                <div class="badge ${pkg.class}">
+                    ${pkg.badge}
+                </div>
+
+                <div class="icon">
+                    <i class="fa-solid ${pkg.icon}"></i>
+                </div>
+
+                <h3>${pkg.name}</h3>
+
+                <div class="price">
+                    ₹${pkg.price.toLocaleString()}
+                </div>
+
+                <div class="features">
+                    ${pkg.features.map(f=>`✓ ${f}<br>`).join("")}
+                </div>
+
+                <a class="btn"
+                target="_blank"
+                href="https://www.makemytrip.com">
+                Book Package
+                </a>
+
+            </div>
+        `;
+    });
+}
+</script>
+
+</body>
+</html>

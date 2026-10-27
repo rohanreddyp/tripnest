@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Budget Planner</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#f8fafc;color:#111827;}
+.topbar{
+    padding:18px 8%;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.logo{font-size:28px;font-weight:700;}
+.back{
+    text-decoration:none;
+    background:white;
+    color:#111827;
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:600;
+}
+.hero{
+    margin:35px 8%;
+    padding:50px;
+    border-radius:35px;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.hero h1{
+    font-size:48px;
+    margin-bottom:10px;
+}
+.hero p{
+    font-size:18px;
+    line-height:1.8;
+}
+.grid{
+    margin:40px 8%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+}
+.card{
+    background:white;
+    border-radius:28px;
+    padding:30px;
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+}
+.card h3{
+    margin-bottom:10px;
+    color:#64748b;
+}
+.amount{
+    font-size:30px;
+    font-weight:800;
+    color:#2563eb;
+}
+.summary,.tips{
+    margin:50px 8%;
+    background:white;
+    border-radius:28px;
+    padding:35px;
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+}
+.summary h2,.tips h2{
+    margin-bottom:20px;
+}
+.line{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    padding:14px 0;
+    border-bottom:1px solid #e2e8f0;
+}
+.total{
+    font-size:24px;
+    font-weight:800;
+    color:#2563eb;
+}
+.good{color:#10b981;font-weight:700;}
+.medium{color:#f59e0b;font-weight:700;}
+.bad{color:#ef4444;font-weight:700;}
+.progress{
+    margin-top:25px;
+    height:14px;
+    border-radius:30px;
+    background:#e2e8f0;
+    overflow:hidden;
+}
+.bar{
+    height:100%;
+    border-radius:30px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+}
+.tips ul{
+    padding-left:20px;
+    line-height:2;
+    color:#64748b;
+}
+.empty{
+    margin:100px 8%;
+    text-align:center;
+    font-size:20px;
+    color:#64748b;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="logo">TripNest</div>
+    <a href="dashboard.html" class="back">Back</a>
+</div>
+
+<section class="hero">
+    <h1>Detailed Budget Planner</h1>
+    <p>Smart cost estimation, travel health and saving suggestions.</p>
+</section>
+
+<section class="grid" id="grid"></section>
+<section class="summary" id="summary"></section>
+<section class="tips" id="tips"></section>
+
+<div class="empty" id="empty" style="display:none;">
+    Create a trip first to view budget planning ✨
+</div>
+
+<script>
+const trips = JSON.parse(localStorage.getItem("trips")) || [];
+const activityCost = Number(localStorage.getItem("activitiesBudget")) || 0;
+
+const grid = document.getElementById("grid");
+const summary = document.getElementById("summary");
+const tips = document.getElementById("tips");
+
+if(!trips.length){
+    document.getElementById("empty").style.display="block";
+    grid.style.display="none";
+    summary.style.display="none";
+    tips.style.display="none";
+}else{
+    const trip = trips[trips.length-1];
+    const budget = Number(trip.budget);
+
+    const stay = Math.round(budget*0.28);
+    const transport = Math.round(budget*0.18);
+    const food = Math.round(budget*0.14);
+    const shopping = Math.round(budget*0.12);
+    const emergency = Math.round(budget*0.08);
+    const misc = Math.round(budget*0.06);
+
+    const total =
+        stay+
+        transport+
+        food+
+        shopping+
+        emergency+
+        misc+
+        activityCost;
+
+    const remaining = budget-total;
+    const used = Math.min((total/budget)*100,100);
+
+    let healthClass="good";
+    let health="Excellent";
+
+    if(used>90){
+        healthClass="bad";
+        health="Over Budget";
+    }else if(used>70){
+        healthClass="medium";
+        health="Moderate";
+    }
+
+    const cards = [
+        ["Planned Budget",budget],
+        ["Stay & Hotel",stay],
+        ["Transport",transport],
+        ["Food & Dining",food],
+        ["Activities",activityCost],
+        ["Shopping",shopping],
+        ["Emergency Reserve",emergency],
+        ["Miscellaneous",misc]
+    ];
+
+    cards.forEach(c=>{
+        grid.innerHTML += `
+            <div class="card">
+                <h3>${c[0]}</h3>
+                <div class="amount">₹${c[1].toLocaleString()}</div>
+            </div>
+        `;
+    });
+
+    summary.innerHTML = `
+        <h2>Budget Summary</h2>
+
+        <div class="line">
+            <span>Total Estimated Spend</span>
+            <b>₹${total.toLocaleString()}</b>
+        </div>
+
+        <div class="line">
+            <span>Remaining Amount</span>
+            <b class="${remaining>=0?'good':'bad'}">
+                ₹${remaining.toLocaleString()}
+            </b>
+        </div>
+
+        <div class="line total">
+            <span>Budget Health</span>
+            <span class="${healthClass}">${health}</span>
+        </div>
+
+        <div class="line total">
+            <span>Utilization</span>
+            <span>${used.toFixed(0)}%</span>
+        </div>
+
+        <div class="progress">
+            <div class="bar" style="width:${used}%"></div>
+        </div>
+    `;
+
+    const suggestions = [];
+
+    if(activityCost > budget*0.2)
+        suggestions.push("Choose fewer premium activities to reduce spend.");
+    if(shopping > budget*0.1)
+        suggestions.push("Set a shopping cap for souvenirs.");
+    if(stay > budget*0.25)
+        suggestions.push("Budget / Premium hotel can save extra money.");
+    if(remaining > 0)
+        suggestions.push(`Great! You can still save ₹${remaining.toLocaleString()}.`);
+    if(remaining < 0)
+        suggestions.push("Current plan exceeds budget — optimize activities or stay.");
+
+    tips.innerHTML = `
+        <h2>Smart Suggestions</h2>
+        <ul>
+            ${suggestions.map(s=>`<li>${s}</li>`).join("")}
+        </ul>
+    `;
+}
+</script>
+
+</body>
+</html>

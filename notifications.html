@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Notifications</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+    background:#f8fafc;
+    color:#111827;
+}
+.topbar{
+    padding:18px 8%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.logo{
+    font-size:28px;
+    font-weight:700;
+}
+.back{
+    text-decoration:none;
+    background:white;
+    color:#111827;
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:600;
+}
+.hero{
+    margin:35px 8%;
+    padding:50px;
+    border-radius:35px;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.hero h1{
+    font-size:48px;
+    margin-bottom:10px;
+}
+.list{
+    margin:40px 8%;
+    display:grid;
+    gap:22px;
+}
+.note{
+    background:white;
+    border-radius:28px;
+    padding:28px;
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+    display:flex;
+    gap:20px;
+    align-items:flex-start;
+}
+.icon{
+    width:70px;
+    height:70px;
+    border-radius:22px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:26px;
+    color:white;
+    flex-shrink:0;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+}
+.content h2{
+    margin-bottom:8px;
+}
+.content p{
+    color:#64748b;
+    line-height:1.8;
+}
+.tag{
+    display:inline-block;
+    margin-top:12px;
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+    background:#eff6ff;
+    color:#2563eb;
+}
+.empty{
+    margin:80px 8%;
+    text-align:center;
+    color:#64748b;
+    font-size:20px;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="logo">TripNest</div>
+    <a href="dashboard.html" class="back">Back</a>
+</div>
+
+<section class="hero">
+    <h1>Notifications</h1>
+    <p>Trip reminders, budget alerts and travel updates.</p>
+</section>
+
+<section class="list" id="list"></section>
+<div class="empty" id="empty" style="display:none;">
+    No notifications yet ✨
+</div>
+
+<script>
+const trips =
+JSON.parse(localStorage.getItem("trips")) || [];
+
+const activityCost =
+Number(localStorage.getItem("activitiesBudget")) || 0;
+
+const list =
+document.getElementById("list");
+
+if(!trips.length){
+    document.getElementById("empty").style.display="block";
+}else{
+    const trip = trips[trips.length-1];
+    const budget = Number(trip.budget);
+
+    const notes = [
+        {
+            icon:"fa-bell",
+            title:"Trip Reminder",
+            msg:`Your upcoming trip to ${trip.destination} is saved successfully.`
+        },
+        {
+            icon:"fa-wallet",
+            title:"Budget Alert",
+            msg: activityCost > budget*0.2
+            ? "Activities are taking a large portion of your budget."
+            : "Your trip budget currently looks healthy."
+        },
+        {
+            icon:"fa-tag",
+            title:"Travel Offer",
+            msg:`Special discounts available for ${trip.destination} bookings this week.`
+        },
+        {
+            icon:"fa-suitcase",
+            title:"Packing Reminder",
+            msg:`Prepare travel essentials before ${trip.startDate}.`
+        }
+    ];
+
+    notes.forEach(n=>{
+        list.innerHTML += `
+            <div class="note">
+                <div class="icon">
+                    <i class="fa-solid ${n.icon}"></i>
+                </div>
+
+                <div class="content">
+                    <h2>${n.title}</h2>
+                    <p>${n.msg}</p>
+                    <span class="tag">NEW</span>
+                </div>
+            </div>
+        `;
+    });
+}
+</script>
+
+</body>
+</html>

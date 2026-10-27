@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Create Trip</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+    min-height:100vh;
+    background:#f8fafc;
+    color:#111827;
+}
+.topbar{
+    padding:18px 8%;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.logo{
+    font-size:28px;
+    font-weight:700;
+}
+.back{
+    text-decoration:none;
+    background:white;
+    color:#111827;
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:600;
+}
+.wrapper{
+    width:90%;
+    max-width:1250px;
+    margin:40px auto;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+.left{
+    border-radius:35px;
+    padding:55px;
+    color:white;
+    background:
+    linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.45)),
+    url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600')
+    center/cover;
+    min-height:720px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+.left h1{
+    font-size:56px;
+    margin-bottom:20px;
+    line-height:1.2;
+}
+.left p{
+    font-size:18px;
+    line-height:1.9;
+}
+.points{
+    margin-top:30px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+.point{
+    padding:10px 18px;
+    border-radius:30px;
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(10px);
+    font-size:14px;
+}
+.form-card{
+    background:white;
+    border-radius:35px;
+    padding:40px;
+    box-shadow:0 20px 45px rgba(0,0,0,.08);
+}
+.form-card h2{
+    margin-bottom:25px;
+    font-size:34px;
+}
+.group{
+    margin-bottom:18px;
+}
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+}
+input,select{
+    width:100%;
+    border:none;
+    outline:none;
+    padding:16px;
+    border-radius:16px;
+    background:#f1f5f9;
+    font-size:15px;
+}
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+.activity-box{
+    margin-top:8px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+.activity-chip{
+    padding:12px 18px;
+    border-radius:30px;
+    background:#f1f5f9;
+    border:2px solid transparent;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:600;
+    transition:.25s;
+}
+.activity-chip:hover{
+    transform:translateY(-3px);
+}
+.activity-chip.active{
+    color:white;
+    border-color:transparent;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+    box-shadow:0 10px 25px rgba(124,58,237,.25);
+}
+.helper{
+    margin-top:10px;
+    color:#64748b;
+    font-size:14px;
+}
+button{
+    width:100%;
+    border:none;
+    padding:16px;
+    border-radius:16px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    color:white;
+    margin-top:10px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+    transition:.3s;
+}
+button:hover{
+    transform:translateY(-3px);
+}
+.preview{
+    margin-top:28px;
+    padding:25px;
+    border-radius:25px;
+    background:#f8fafc;
+    border:2px dashed #cbd5e1;
+    line-height:2;
+}
+.toast{
+    position:fixed;
+    top:30px;
+    right:30px;
+    background:white;
+    padding:14px 20px;
+    border-radius:14px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    transform:translateX(150%);
+    transition:.4s;
+    z-index:9999;
+}
+.toast.show{
+    transform:translateX(0);
+}
+@media(max-width:950px){
+    .wrapper{
+        grid-template-columns:1fr;
+    }
+    .left{
+        min-height:420px;
+        padding:40px 30px;
+    }
+    .left h1{
+        font-size:40px;
+    }
+    .row{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="topbar">
+    <div class="logo">TripNest</div>
+    <a href="dashboard.html" class="back">Back</a>
+</div>
+
+<div class="wrapper">
+
+    <div class="left">
+        <h1>Create Your Dream Journey</h1>
+        <p>
+            Select destination, dates, budget and travel preferences.
+            Pick activities based on your destination and TripNest
+            will personalize your complete journey.
+        </p>
+
+        <div class="points">
+            <div class="point">Hotels</div>
+            <div class="point">Packages</div>
+            <div class="point">Activities</div>
+            <div class="point">Maps</div>
+            <div class="point">Budget</div>
+        </div>
+    </div>
+
+    <form class="form-card" id="tripForm">
+
+        <h2>Plan Trip ✈️</h2>
+
+        <div class="group">
+            <label>Destination</label>
+            <select id="destination" required>
+                <option value="">Choose destination</option>
+                <option>Goa</option>
+                <option>Manali</option>
+                <option>Kashmir</option>
+                <option>Jaipur</option>
+                <option>Kerala</option>
+                <option>Maldives</option>
+                <option>Dubai</option>
+                <option>Paris</option>
+                <option>Switzerland</option>
+                <option>Bali</option>
+                <option>Tokyo</option>
+                <option>Singapore</option>
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="group">
+                <label>Start Date</label>
+                <input type="date" id="startDate" required>
+            </div>
+
+            <div class="group">
+                <label>End Date</label>
+                <input type="date" id="endDate" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="group">
+                <label>Budget</label>
+                <input type="number" id="budget" placeholder="Budget" required>
+            </div>
+
+            <div class="group">
+                <label>Travelers</label>
+                <input type="number" id="travelers" placeholder="Travelers" required>
+            </div>
+        </div>
+
+        <div class="group">
+            <label>Transport</label>
+            <select id="transport">
+                <option>Flight</option>
+                <option>Train</option>
+                <option>Bus</option>
+                <option>Car</option>
+                <option>Cruise</option>
+            </select>
+        </div>
+
+        <div class="group">
+            <label>Travel Preference</label>
+            <select id="preference">
+                <option>Adventure</option>
+                <option>Luxury</option>
+                <option>Family</option>
+                <option>Romantic</option>
+                <option>Solo</option>
+                <option>Budget Friendly</option>
+            </select>
+        </div>
+
+        <div class="group">
+            <label>Choose Activities</label>
+            <div class="activity-box" id="activityBox">
+                <div class="helper">Select destination to see activities ✨</div>
+            </div>
+        </div>
+
+        <button type="submit">Generate Smart Trip</button>
+
+        <div class="preview" id="previewBox">
+            Fill details to preview your trip summary ✨
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+const toast = document.getElementById("toast");
+const activityBox = document.getElementById("activityBox");
+const preview = document.getElementById("previewBox");
+const form = document.getElementById("tripForm");
+
+let selectedActivities = [];
+
+const activityMap = {
+    Goa:["Scuba Diving","Parasailing","Cruise Dinner","Beach Walk","Nightlife Tour","Shopping"],
+    Manali:["Skiing","Trekking","River Rafting","Camping","Snow Ride","Cafe Hopping"],
+    Kashmir:["Shikara Ride","Snow Trek","Gondola Ride","Valley Tour","Shopping"],
+    Jaipur:["Palace Tour","Camel Ride","Market Visit","Cultural Show","Fort Visit"],
+    Kerala:["Houseboat","Ayurveda Spa","Backwater Ride","Tea Garden Visit","Beach Relax"],
+    Maldives:["Snorkeling","Private Cruise","Island Spa","Beach Dinner","Scuba Diving"],
+    Dubai:["Desert Safari","Burj Khalifa","Luxury Cruise","Shopping","Sky Dive"],
+    Paris:["Eiffel Visit","Seine Cruise","Louvre Visit","Cafe Tour","Shopping"],
+    Switzerland:["Cable Car","Snow Activities","Lake Cruise","Train Tour","Village Walk"],
+    Bali:["Temple Tour","Beach Club","Water Sports","Jungle Swing","Sunset Dinner"],
+    Tokyo:["City Lights Tour","Anime Street","Temple Visit","Food Tour","Shopping"],
+    Singapore:["Universal Studios","Night Safari","Skypark","Marina Cruise","Gardens Visit"]
+};
+
+function showToast(msg){
+    toast.innerText = msg;
+    toast.classList.add("show");
+    setTimeout(()=>toast.classList.remove("show"),2200);
+}
+
+function renderActivities(){
+    const dest = destination.value;
+    selectedActivities = [];
+    activityBox.innerHTML = "";
+
+    if(!dest){
+        activityBox.innerHTML =
+        '<div class="helper">Select destination to see activities ✨</div>';
+        updatePreview();
+        return;
+    }
+
+    activityMap[dest].forEach(activity=>{
+        const chip = document.createElement("div");
+        chip.className = "activity-chip";
+        chip.innerText = activity;
+
+        chip.onclick = ()=>{
+            chip.classList.toggle("active");
+
+            if(selectedActivities.includes(activity)){
+                selectedActivities =
+                selectedActivities.filter(a=>a!==activity);
+            }else{
+                selectedActivities.push(activity);
+            }
+
+            updatePreview();
+        };
+
+        activityBox.appendChild(chip);
+    });
+}
+
+function updatePreview(){
+    const d = destination.value || "--";
+    const b = budget.value || 0;
+    const t = travelers.value || 0;
+    const p = preference.value || "--";
+
+    preview.innerHTML = `
+        <h3>${d}</h3>
+        <p>💰 Budget: ₹${b}</p>
+        <p>👥 Travelers: ${t}</p>
+        <p>🎯 Style: ${p}</p>
+        <p>✨ Activities: ${
+            selectedActivities.length
+            ? selectedActivities.join(", ")
+            : "Not selected"
+        }</p>
+    `;
+}
+
+destination.addEventListener("change", renderActivities);
+form.addEventListener("input", updatePreview);
+
+form.addEventListener("submit",function(e){
+    e.preventDefault();
+
+    const trip = {
+        destination: destination.value,
+        startDate: startDate.value,
+        endDate: endDate.value,
+        budget: budget.value,
+        travelers: travelers.value,
+        transport: transport.value,
+        preference: preference.value,
+        activities: selectedActivities
+    };
+
+    let trips =
+    JSON.parse(localStorage.getItem("trips")) || [];
+
+    trips.push(trip);
+
+    localStorage.setItem("trips", JSON.stringify(trips));
+    localStorage.setItem("selectedDestination", trip.destination);
+    localStorage.setItem("selectedActivities", JSON.stringify(selectedActivities));
+
+    showToast("Trip created successfully ✨");
+
+    setTimeout(()=>{
+        window.location.href="dashboard.html";
+    },1000);
+});
+</script>
+
+</body>
+</html>

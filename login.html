@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Login</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    overflow:hidden;
+    position:relative;
+}
+
+body::before,
+body::after{
+    content:"";
+    position:absolute;
+    width:350px;
+    height:350px;
+    border-radius:50%;
+    filter:blur(70px);
+    opacity:.28;
+    animation:float 8s infinite ease-in-out;
+}
+
+body::before{
+    background:white;
+    top:-80px;
+    left:-80px;
+}
+
+body::after{
+    background:#fde68a;
+    bottom:-80px;
+    right:-80px;
+    animation-delay:2s;
+}
+
+.container{
+    width:100%;
+    max-width:1100px;
+    min-height:650px;
+    border-radius:35px;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    box-shadow:0 30px 60px rgba(0,0,0,.18);
+    position:relative;
+    z-index:10;
+}
+
+.left{
+    background:
+    linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.45)),
+    url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600')
+    center/cover;
+    color:white;
+    padding:70px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.left h1{
+    font-size:58px;
+    line-height:1.2;
+    margin-bottom:20px;
+}
+
+.left p{
+    font-size:18px;
+    line-height:1.9;
+    max-width:450px;
+}
+
+.tags{
+    margin-top:28px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.tag{
+    padding:10px 18px;
+    border-radius:30px;
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(10px);
+    font-size:14px;
+}
+
+.right{
+    background:rgba(255,255,255,.16);
+    backdrop-filter:blur(30px);
+    padding:60px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.form-box{
+    width:100%;
+    max-width:420px;
+    color:white;
+}
+
+.form-box h2{
+    font-size:36px;
+    margin-bottom:10px;
+}
+
+.sub{
+    margin-bottom:30px;
+    opacity:.9;
+}
+
+.input-group{
+    margin-bottom:20px;
+    position:relative;
+}
+
+.input-group i{
+    position:absolute;
+    left:18px;
+    top:18px;
+    font-size:16px;
+    color:#64748b;
+}
+
+.input-group input{
+    width:100%;
+    padding:16px 16px 16px 50px;
+    border:none;
+    outline:none;
+    border-radius:16px;
+    font-size:15px;
+    background:white;
+}
+
+.login-btn{
+    width:100%;
+    border:none;
+    padding:16px;
+    border-radius:16px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+    box-shadow:0 12px 25px rgba(0,0,0,.12);
+    transition:.3s;
+}
+
+.login-btn:hover{
+    transform:translateY(-3px);
+}
+
+.bottom{
+    margin-top:25px;
+    text-align:center;
+}
+
+.bottom a{
+    color:#fde68a;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.toast{
+    position:fixed;
+    top:30px;
+    right:30px;
+    background:white;
+    color:#111827;
+    padding:14px 20px;
+    border-radius:14px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    transform:translateX(150%);
+    transition:.4s;
+    z-index:9999;
+    font-weight:500;
+}
+
+.toast.show{
+    transform:translateX(0);
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-30px);}
+}
+
+@media(max-width:900px){
+    .container{
+        grid-template-columns:1fr;
+    }
+
+    .left{
+        padding:45px 30px;
+    }
+
+    .left h1{
+        font-size:38px;
+    }
+
+    .right{
+        padding:40px 25px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="container">
+
+    <div class="left">
+        <h1>Welcome Back Explorer</h1>
+
+        <p>
+            Continue planning memorable trips with smart itineraries,
+            destination insights, packages, hotels and route planning.
+        </p>
+
+        <div class="tags">
+            <div class="tag">Hotels</div>
+            <div class="tag">Packages</div>
+            <div class="tag">Maps</div>
+            <div class="tag">Budget</div>
+        </div>
+    </div>
+
+    <div class="right">
+
+        <form class="form-box" id="loginForm">
+
+            <h2>Login</h2>
+            <p class="sub">Access your TripNest dashboard</p>
+
+            <div class="input-group">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" id="email" placeholder="Email address" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+
+            <button class="login-btn" type="submit">
+                Login
+            </button>
+
+            <div class="bottom">
+                Don't have an account?
+                <a href="signup.html">Create Account</a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+const toast = document.getElementById("toast");
+
+function showToast(msg){
+    toast.innerText = msg;
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },2200);
+}
+
+document.getElementById("loginForm")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const email =
+    document.getElementById("email").value;
+
+    const password =
+    document.getElementById("password").value;
+
+    const user =
+    JSON.parse(localStorage.getItem("tripnestUser"));
+
+    if(
+        user &&
+        user.email===email &&
+        user.password===password
+    ){
+        localStorage.setItem("loggedIn","true");
+
+        showToast("Login successful ✨");
+
+        setTimeout(()=>{
+            window.location.href="dashboard.html";
+        },1200);
+
+    }else{
+        showToast("Invalid credentials");
+    }
+
+});
+</script>
+
+</body>
+</html>

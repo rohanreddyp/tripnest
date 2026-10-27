@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Signup</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    overflow:hidden;
+    position:relative;
+}
+
+body::before,
+body::after{
+    content:"";
+    position:absolute;
+    width:350px;
+    height:350px;
+    border-radius:50%;
+    filter:blur(70px);
+    opacity:.28;
+    animation:float 8s infinite ease-in-out;
+}
+
+body::before{
+    background:white;
+    top:-80px;
+    left:-80px;
+}
+
+body::after{
+    background:#fde68a;
+    bottom:-80px;
+    right:-80px;
+    animation-delay:2s;
+}
+
+.container{
+    width:100%;
+    max-width:1100px;
+    min-height:680px;
+    border-radius:35px;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    box-shadow:0 30px 60px rgba(0,0,0,.18);
+    position:relative;
+    z-index:10;
+}
+
+.left{
+    background:rgba(255,255,255,.16);
+    backdrop-filter:blur(30px);
+    padding:60px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.form-box{
+    width:100%;
+    max-width:430px;
+    color:white;
+}
+
+.form-box h2{
+    font-size:36px;
+    margin-bottom:10px;
+}
+
+.sub{
+    margin-bottom:30px;
+    opacity:.9;
+}
+
+.input-group{
+    margin-bottom:18px;
+    position:relative;
+}
+
+.input-group i{
+    position:absolute;
+    left:18px;
+    top:18px;
+    color:#64748b;
+}
+
+.input-group input{
+    width:100%;
+    padding:16px 16px 16px 50px;
+    border:none;
+    outline:none;
+    border-radius:16px;
+    background:white;
+    font-size:15px;
+}
+
+.signup-btn{
+    width:100%;
+    border:none;
+    padding:16px;
+    border-radius:16px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+    box-shadow:0 12px 25px rgba(0,0,0,.12);
+    transition:.3s;
+}
+
+.signup-btn:hover{
+    transform:translateY(-3px);
+}
+
+.bottom{
+    margin-top:22px;
+    text-align:center;
+}
+
+.bottom a{
+    color:#fde68a;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.right{
+    background:
+    linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.48)),
+    url('https://images.unsplash.com/photo-1527631746610-bca00a040d60?q=80&w=1600')
+    center/cover;
+    color:white;
+    padding:70px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.right h1{
+    font-size:56px;
+    margin-bottom:20px;
+    line-height:1.2;
+}
+
+.right p{
+    font-size:18px;
+    line-height:1.9;
+    max-width:480px;
+}
+
+.benefits{
+    margin-top:28px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.benefit{
+    padding:10px 18px;
+    border-radius:30px;
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(10px);
+    font-size:14px;
+}
+
+.toast{
+    position:fixed;
+    top:30px;
+    right:30px;
+    background:white;
+    color:#111827;
+    padding:14px 20px;
+    border-radius:14px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    transform:translateX(150%);
+    transition:.4s;
+    z-index:9999;
+    font-weight:500;
+}
+
+.toast.show{
+    transform:translateX(0);
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-30px);}
+}
+
+@media(max-width:900px){
+    .container{
+        grid-template-columns:1fr;
+    }
+
+    .right{
+        padding:45px 30px;
+    }
+
+    .right h1{
+        font-size:38px;
+    }
+
+    .left{
+        padding:40px 25px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="container">
+
+    <div class="left">
+
+        <form class="form-box" id="signupForm">
+
+            <h2>Create Account</h2>
+            <p class="sub">Start your smart travel journey</p>
+
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="name" placeholder="Full name" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" id="email" placeholder="Email address" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+
+            <button class="signup-btn" type="submit">
+                Create Account
+            </button>
+
+            <div class="bottom">
+                Already have an account?
+                <a href="login.html">Login</a>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="right">
+        <h1>Begin Your Adventure</h1>
+
+        <p>
+            Join TripNest to discover destinations, book stays,
+            explore packages, plan activities, manage budgets
+            and navigate smarter.
+        </p>
+
+        <div class="benefits">
+            <div class="benefit">Hotels</div>
+            <div class="benefit">Packages</div>
+            <div class="benefit">Activities</div>
+            <div class="benefit">Maps</div>
+            <div class="benefit">Budget</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const toast = document.getElementById("toast");
+
+function showToast(msg){
+    toast.innerText = msg;
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },2200);
+}
+
+document.getElementById("signupForm")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const user = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+    };
+
+    localStorage.setItem(
+        "tripnestUser",
+        JSON.stringify(user)
+    );
+
+    showToast("Account created successfully ✨");
+
+    setTimeout(()=>{
+        window.location.href="login.html";
+    },1200);
+
+});
+</script>
+
+</body>
+</html>

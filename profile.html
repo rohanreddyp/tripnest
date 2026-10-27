@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Profile</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+    background:#f8fafc;
+    color:#111827;
+}
+.topbar{
+    padding:18px 8%;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.logo{
+    font-size:28px;
+    font-weight:700;
+}
+.back{
+    text-decoration:none;
+    background:white;
+    color:#111827;
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:600;
+}
+.hero{
+    margin:35px 8%;
+    border-radius:35px;
+    padding:50px;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+    display:flex;
+    gap:30px;
+    align-items:center;
+    flex-wrap:wrap;
+}
+.avatar{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:rgba(255,255,255,.2);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:44px;
+    border:3px solid rgba(255,255,255,.35);
+}
+.hero h1{
+    font-size:42px;
+    margin-bottom:8px;
+}
+.hero p{
+    font-size:18px;
+    opacity:.95;
+}
+.grid{
+    margin:40px 8%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:25px;
+}
+.card{
+    background:white;
+    border-radius:28px;
+    padding:30px;
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+}
+.label{
+    color:#64748b;
+    margin-bottom:12px;
+    font-size:15px;
+}
+.value{
+    font-size:30px;
+    font-weight:800;
+    color:#2563eb;
+}
+.section{
+    margin:50px 8%;
+    background:white;
+    border-radius:28px;
+    padding:35px;
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+}
+.section h2{
+    margin-bottom:20px;
+}
+.row{
+    padding:14px 0;
+    border-bottom:1px solid #e2e8f0;
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+}
+.badges{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:20px;
+}
+.badge{
+    padding:10px 18px;
+    border-radius:30px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+    color:white;
+    font-size:14px;
+    font-weight:600;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="logo">TripNest</div>
+    <a href="dashboard.html" class="back">Back</a>
+</div>
+
+<section class="hero">
+    <div class="avatar">
+        <i class="fa-solid fa-user"></i>
+    </div>
+
+    <div>
+        <h1 id="name">Traveler</h1>
+        <p id="email">welcome@tripnest.com</p>
+    </div>
+</section>
+
+<section class="grid">
+    <div class="card">
+        <div class="label">Trips Planned</div>
+        <div class="value" id="tripCount">0</div>
+    </div>
+
+    <div class="card">
+        <div class="label">Total Budget</div>
+        <div class="value" id="budgetCount">₹0</div>
+    </div>
+
+    <div class="card">
+        <div class="label">Favorite Destination</div>
+        <div class="value" id="fav">--</div>
+    </div>
+
+    <div class="card">
+        <div class="label">Travel Style</div>
+        <div class="value" id="style">--</div>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Travel Insights</h2>
+
+    <div class="row">
+        <span>Most Recent Destination</span>
+        <b id="recent">--</b>
+    </div>
+
+    <div class="row">
+        <span>Selected Activities</span>
+        <b id="acts">0</b>
+    </div>
+
+    <div class="row">
+        <span>Explorer Level</span>
+        <b id="level">Beginner Explorer</b>
+    </div>
+
+    <div class="badges" id="badges"></div>
+</section>
+
+<script>
+const user =
+JSON.parse(localStorage.getItem("tripnestUser")) || {};
+
+const trips =
+JSON.parse(localStorage.getItem("trips")) || [];
+
+const acts =
+JSON.parse(localStorage.getItem("selectedActivities")) || [];
+
+document.getElementById("name").innerText =
+user.name || "Traveler";
+
+document.getElementById("email").innerText =
+user.email || "welcome@tripnest.com";
+
+document.getElementById("tripCount").innerText =
+trips.length;
+
+let budget = 0;
+const map = {};
+
+trips.forEach(t=>{
+    budget += Number(t.budget || 0);
+
+    map[t.destination] =
+    (map[t.destination] || 0) + 1;
+});
+
+document.getElementById("budgetCount").innerText =
+`₹${budget.toLocaleString()}`;
+
+let fav = "--";
+
+let max = 0;
+
+for(let place in map){
+    if(map[place] > max){
+        max = map[place];
+        fav = place;
+    }
+}
+
+document.getElementById("fav").innerText =
+fav;
+
+const latest =
+trips[trips.length-1];
+
+document.getElementById("style").innerText =
+latest?.preference || "--";
+
+document.getElementById("recent").innerText =
+latest?.destination || "--";
+
+document.getElementById("acts").innerText =
+acts.length;
+
+document.getElementById("level").innerText =
+trips.length>=5
+? "Globe Master"
+: trips.length>=3
+? "Travel Pro"
+: trips.length>=1
+? "Explorer"
+: "Beginner Explorer";
+
+const badges =
+document.getElementById("badges");
+
+const list = [];
+
+if(trips.length>=1) list.push("First Trip");
+if(trips.length>=3) list.push("Frequent Traveler");
+if(acts.length>=2) list.push("Activity Lover");
+if(budget>=50000) list.push("Premium Explorer");
+if(fav!=="--") list.push(`${fav} Fan`);
+
+if(!list.length) list.push("New Member");
+
+list.forEach(b=>{
+    badges.innerHTML +=
+    `<div class="badge">${b}</div>`;
+});
+</script>
+
+</body>
+</html>

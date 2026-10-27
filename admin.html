@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Admin Panel</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+    background:#f8fafc;
+    color:#111827;
+}
+.topbar{
+    padding:18px 8%;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.logo{
+    font-size:28px;
+    font-weight:700;
+}
+.back{
+    text-decoration:none;
+    background:white;
+    color:#111827;
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:600;
+}
+.hero{
+    margin:35px 8%;
+    border-radius:35px;
+    padding:50px;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.hero h1{
+    font-size:48px;
+    margin-bottom:10px;
+}
+.hero p{
+    font-size:18px;
+    line-height:1.8;
+}
+.grid{
+    margin:40px 8%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+}
+.card{
+    background:white;
+    border-radius:28px;
+    padding:30px;
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+}
+.icon{
+    width:70px;
+    height:70px;
+    border-radius:22px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:28px;
+    color:white;
+    margin-bottom:18px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+}
+.label{
+    color:#64748b;
+    margin-bottom:10px;
+}
+.value{
+    font-size:32px;
+    font-weight:800;
+    color:#2563eb;
+}
+.report{
+    margin:50px 8%;
+    background:white;
+    border-radius:28px;
+    padding:35px;
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+}
+.report h2{
+    margin-bottom:20px;
+}
+.line{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    padding:14px 0;
+    border-bottom:1px solid #e2e8f0;
+}
+.good{
+    color:#10b981;
+    font-weight:700;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="logo">TripNest Admin</div>
+    <a href="dashboard.html" class="back">Back</a>
+</div>
+
+<section class="hero">
+    <h1>Analytics Dashboard</h1>
+    <p>
+        Smart insights into platform usage, travel trends and engagement.
+    </p>
+</section>
+
+<section class="grid" id="grid"></section>
+
+<section class="report" id="report"></section>
+
+<script>
+const user =
+JSON.parse(localStorage.getItem("tripnestUser")) || {};
+
+const trips =
+JSON.parse(localStorage.getItem("trips")) || [];
+
+const acts =
+JSON.parse(localStorage.getItem("selectedActivities")) || [];
+
+let revenue = 0;
+const places = {};
+
+trips.forEach(t=>{
+    revenue += Number(t.budget || 0);
+    places[t.destination] =
+    (places[t.destination] || 0) + 1;
+});
+
+let popular = "--";
+let max = 0;
+
+for(let p in places){
+    if(places[p] > max){
+        max = places[p];
+        popular = p;
+    }
+}
+
+const cards = [
+{
+icon:"fa-users",
+label:"Registered Users",
+value:user.name ? 1 : 0
+},
+{
+icon:"fa-plane",
+label:"Trips Planned",
+value:trips.length
+},
+{
+icon:"fa-wallet",
+label:"Revenue Estimate",
+value:`₹${revenue.toLocaleString()}`
+},
+{
+icon:"fa-location-dot",
+label:"Popular Destination",
+value:popular
+}
+];
+
+const grid =
+document.getElementById("grid");
+
+cards.forEach(c=>{
+    grid.innerHTML += `
+        <div class="card">
+            <div class="icon">
+                <i class="fa-solid ${c.icon}"></i>
+            </div>
+            <div class="label">${c.label}</div>
+            <div class="value">${c.value}</div>
+        </div>
+    `;
+});
+
+let packageTier =
+revenue > 150000
+? "Luxury Package Users"
+: revenue > 60000
+? "Premium Package Users"
+: "Budget Package Users";
+
+document.getElementById("report").innerHTML = `
+    <h2>Insights Report</h2>
+
+    <div class="line">
+        <span>Most Popular Destination</span>
+        <b>${popular}</b>
+    </div>
+
+    <div class="line">
+        <span>Activities Engagement</span>
+        <b>${acts.length} activities selected</b>
+    </div>
+
+    <div class="line">
+        <span>Preferred Package Segment</span>
+        <b>${packageTier}</b>
+    </div>
+
+    <div class="line">
+        <span>Platform Health</span>
+        <span class="good">Excellent</span>
+    </div>
+
+    <div class="line">
+        <span>Growth Suggestion</span>
+        <b>Launch seasonal travel offers</b>
+    </div>
+`;
+</script>
+
+</body>
+</html>

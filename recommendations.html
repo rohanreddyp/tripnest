@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Recommendations</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#f8fafc;color:#111827;}
+.topbar{
+    padding:18px 8%;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.logo{font-size:28px;font-weight:700;}
+.back{
+    text-decoration:none;
+    background:white;
+    color:#111827;
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:600;
+}
+.hero{
+    margin:35px 8%;
+    border-radius:35px;
+    padding:50px;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+    box-shadow:0 20px 45px rgba(0,0,0,.12);
+}
+.hero h1{font-size:50px;margin-bottom:10px;}
+.hero p{font-size:18px;line-height:1.8;}
+.grid{
+    margin:40px 8%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+.card{
+    background:white;
+    border-radius:28px;
+    overflow:hidden;
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+    transition:.3s;
+}
+.card:hover{transform:translateY(-8px);}
+.card img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
+.content{padding:22px;}
+.content h3{margin-bottom:10px;}
+.content p{
+    color:#64748b;
+    line-height:1.8;
+    margin-bottom:15px;
+}
+.tag{
+    display:inline-block;
+    padding:8px 14px;
+    border-radius:20px;
+    background:#eff6ff;
+    color:#2563eb;
+    font-size:13px;
+    font-weight:600;
+}
+.empty{
+    margin:80px 8%;
+    text-align:center;
+    font-size:20px;
+    color:#64748b;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="logo">TripNest</div>
+    <a href="dashboard.html" class="back">Back</a>
+</div>
+
+<section class="hero">
+    <h1 id="title">Smart Recommendations</h1>
+    <p id="subtitle">
+        Discover places tailored to your destination.
+    </p>
+</section>
+
+<div class="grid" id="grid"></div>
+<div class="empty" id="empty" style="display:none;">
+    Create a trip first to unlock smart recommendations ✨
+</div>
+
+<script>
+const destination =
+localStorage.getItem("selectedDestination");
+
+const grid =
+document.getElementById("grid");
+
+const title =
+document.getElementById("title");
+
+const subtitle =
+document.getElementById("subtitle");
+
+const data = {
+Goa:[
+{
+name:"Baga Beach",
+img:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200",
+desc:"Golden beaches, nightlife and water sports.",
+tag:"Adventure"
+},
+{
+name:"Dudhsagar Falls",
+img:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200",
+desc:"Majestic waterfall and scenic forest ride.",
+tag:"Nature"
+},
+{
+name:"Cruise Dinner",
+img:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=1200",
+desc:"Romantic evening cruise with music and food.",
+tag:"Luxury"
+}
+],
+Manali:[
+{
+name:"Solang Valley",
+img:"https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?q=80&w=1200",
+desc:"Paragliding, skiing and breathtaking mountain views.",
+tag:"Adventure"
+},
+{
+name:"Hadimba Temple",
+img:"https://images.unsplash.com/photo-1521295121783-8a321d551ad2?q=80&w=1200",
+desc:"Historic temple surrounded by cedar forest.",
+tag:"Culture"
+},
+{
+name:"River Camping",
+img:"https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200",
+desc:"Camp under stars beside flowing river streams.",
+tag:"Experience"
+}
+],
+Maldives:[
+{
+name:"Private Villa Stay",
+img:"https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=1200",
+desc:"Luxury villas over turquoise waters.",
+tag:"Luxury"
+},
+{
+name:"Scuba Diving",
+img:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200",
+desc:"Explore coral reefs and marine life.",
+tag:"Adventure"
+},
+{
+name:"Sunset Cruise",
+img:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200",
+desc:"Watch magical sunsets in open ocean.",
+tag:"Romantic"
+}
+],
+Paris:[
+{
+name:"Eiffel Tower",
+img:"https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=1200",
+desc:"Iconic city landmark and skyline views.",
+tag:"Must Visit"
+},
+{
+name:"Seine Cruise",
+img:"https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1200",
+desc:"Romantic cruise through city lights.",
+tag:"Romantic"
+},
+{
+name:"Louvre Museum",
+img:"https://images.unsplash.com/photo-1565099824688-e93eb20fe622?q=80&w=1200",
+desc:"World famous art and culture destination.",
+tag:"Culture"
+}
+]
+};
+
+if(!destination){
+    document.getElementById("empty").style.display="block";
+    grid.style.display="none";
+}else{
+    title.innerText =
+    `${destination} Recommendations`;
+
+    subtitle.innerText =
+    `Top curated experiences in ${destination}`;
+
+    const list =
+    data[destination] || [
+        {
+            name:`Explore ${destination}`,
+            img:"https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200",
+            desc:"Discover top attractions, culture and experiences.",
+            tag:"Popular"
+        }
+    ];
+
+    list.forEach(place=>{
+        grid.innerHTML += `
+            <div class="card">
+                <img src="${place.img}">
+                <div class="content">
+                    <h3>${place.name}</h3>
+                    <p>${place.desc}</p>
+                    <span class="tag">${place.tag}</span>
+                </div>
+            </div>
+        `;
+    });
+}
+</script>
+
+</body>
+</html>

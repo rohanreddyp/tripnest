@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Route Planner</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+    min-height:100vh;
+    background:#f8fafc;
+    color:#111827;
+}
+.topbar{
+    padding:18px 8%;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.logo{
+    font-size:28px;
+    font-weight:700;
+}
+.back{
+    text-decoration:none;
+    background:white;
+    color:#111827;
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:600;
+}
+.wrapper{
+    width:90%;
+    max-width:1100px;
+    margin:50px auto;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+.left{
+    border-radius:35px;
+    padding:55px;
+    color:white;
+    min-height:620px;
+    background:
+    linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.45)),
+    url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1600')
+    center/cover;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+.left h1{
+    font-size:54px;
+    margin-bottom:18px;
+}
+.left p{
+    font-size:18px;
+    line-height:1.9;
+}
+.tags{
+    margin-top:28px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+.tag{
+    padding:10px 18px;
+    border-radius:30px;
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(10px);
+    font-size:14px;
+}
+.right{
+    background:white;
+    border-radius:35px;
+    padding:40px;
+    box-shadow:0 20px 45px rgba(0,0,0,.08);
+}
+.right h2{
+    font-size:34px;
+    margin-bottom:25px;
+}
+.group{
+    margin-bottom:18px;
+}
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+}
+input{
+    width:100%;
+    border:none;
+    outline:none;
+    padding:16px;
+    border-radius:16px;
+    background:#f1f5f9;
+    font-size:15px;
+}
+button{
+    width:100%;
+    border:none;
+    padding:16px;
+    border-radius:16px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    color:white;
+    margin-top:8px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+    transition:.3s;
+}
+button:hover{
+    transform:translateY(-3px);
+}
+.quick{
+    margin-top:28px;
+    padding:25px;
+    border-radius:25px;
+    background:#f8fafc;
+    line-height:2;
+    color:#64748b;
+}
+.toast{
+    position:fixed;
+    top:30px;
+    right:30px;
+    background:white;
+    padding:14px 20px;
+    border-radius:14px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    transform:translateX(150%);
+    transition:.4s;
+    z-index:9999;
+}
+.toast.show{
+    transform:translateX(0);
+}
+@media(max-width:900px){
+    .wrapper{
+        grid-template-columns:1fr;
+    }
+    .left{
+        min-height:350px;
+        padding:40px 30px;
+    }
+    .left h1{
+        font-size:40px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="topbar">
+    <div class="logo">TripNest</div>
+    <a href="dashboard.html" class="back">Back</a>
+</div>
+
+<div class="wrapper">
+
+    <div class="left">
+        <h1>Smart Route Planner</h1>
+        <p>
+            Enter your starting location and destination.
+            Instantly launch live navigation and route planning.
+        </p>
+
+        <div class="tags">
+            <div class="tag">Live Route</div>
+            <div class="tag">Distance</div>
+            <div class="tag">Navigation</div>
+            <div class="tag">Travel Time</div>
+        </div>
+    </div>
+
+    <div class="right">
+
+        <h2>Plan Route 🗺️</h2>
+
+        <div class="group">
+            <label>Source</label>
+            <input type="text" id="source"
+            placeholder="Enter source city">
+        </div>
+
+        <div class="group">
+            <label>Destination</label>
+            <input type="text" id="destination"
+            placeholder="Enter destination city">
+        </div>
+
+        <button onclick="openRoute()">
+            Open in Google Maps
+        </button>
+
+        <div class="quick">
+            <b>Quick Tip:</b><br>
+            Example:
+            Bangalore → Goa<br>
+            Hyderabad → Manali<br>
+            Delhi → Kashmir
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+const toast =
+document.getElementById("toast");
+
+function showToast(msg){
+    toast.innerText = msg;
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },2200);
+}
+
+function openRoute(){
+
+    const source =
+    document.getElementById("source").value.trim();
+
+    const destination =
+    document.getElementById("destination").value.trim();
+
+    if(!source || !destination){
+        showToast("Enter source & destination");
+        return;
+    }
+
+    const url =
+    `https://www.google.com/maps/dir/${encodeURIComponent(source)}/${encodeURIComponent(destination)}`;
+
+    showToast("Opening route ✨");
+
+    setTimeout(()=>{
+        window.open(url,"_blank");
+    },700);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Edit Trip</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+    background:#f8fafc;
+    color:#111827;
+    min-height:100vh;
+}
+.topbar{
+    padding:18px 8%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.logo{
+    font-size:28px;
+    font-weight:700;
+}
+.back{
+    text-decoration:none;
+    background:white;
+    color:#111827;
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:600;
+}
+.wrapper{
+    width:90%;
+    max-width:1100px;
+    margin:45px auto;
+}
+.card{
+    background:white;
+    border-radius:35px;
+    padding:40px;
+    box-shadow:0 20px 45px rgba(0,0,0,.08);
+}
+.card h1{
+    margin-bottom:30px;
+}
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+.group{
+    margin-bottom:18px;
+}
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+}
+input,select{
+    width:100%;
+    border:none;
+    outline:none;
+    padding:16px;
+    border-radius:16px;
+    background:#f1f5f9;
+    font-size:15px;
+}
+button{
+    width:100%;
+    border:none;
+    padding:16px;
+    border-radius:16px;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:10px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+}
+.toast{
+    position:fixed;
+    top:30px;
+    right:30px;
+    background:white;
+    padding:14px 20px;
+    border-radius:14px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    transform:translateX(150%);
+    transition:.4s;
+}
+.toast.show{
+    transform:translateX(0);
+}
+@media(max-width:768px){
+    .row{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="topbar">
+    <div class="logo">TripNest</div>
+    <a href="dashboard.html" class="back">Back</a>
+</div>
+
+<div class="wrapper">
+    <div class="card">
+        <h1>Edit Your Trip ✈️</h1>
+
+        <form id="editForm">
+
+            <div class="group">
+                <label>Destination</label>
+                <select id="destination">
+                    <option>Goa</option>
+                    <option>Manali</option>
+                    <option>Kashmir</option>
+                    <option>Jaipur</option>
+                    <option>Kerala</option>
+                    <option>Maldives</option>
+                    <option>Dubai</option>
+                    <option>Paris</option>
+                    <option>Switzerland</option>
+                    <option>Bali</option>
+                    <option>Tokyo</option>
+                    <option>Singapore</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="group">
+                    <label>Start Date</label>
+                    <input type="date" id="startDate">
+                </div>
+
+                <div class="group">
+                    <label>End Date</label>
+                    <input type="date" id="endDate">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="group">
+                    <label>Budget</label>
+                    <input type="number" id="budget">
+                </div>
+
+                <div class="group">
+                    <label>Travelers</label>
+                    <input type="number" id="travelers">
+                </div>
+            </div>
+
+            <div class="group">
+                <label>Transport</label>
+                <select id="transport">
+                    <option>Flight</option>
+                    <option>Train</option>
+                    <option>Bus</option>
+                    <option>Car</option>
+                    <option>Cruise</option>
+                </select>
+            </div>
+
+            <div class="group">
+                <label>Travel Preference</label>
+                <select id="preference">
+                    <option>Adventure</option>
+                    <option>Luxury</option>
+                    <option>Family</option>
+                    <option>Romantic</option>
+                    <option>Solo</option>
+                    <option>Budget Friendly</option>
+                </select>
+            </div>
+
+            <button type="submit">Save Changes</button>
+
+        </form>
+    </div>
+</div>
+
+<script>
+const toast = document.getElementById("toast");
+
+function showToast(msg){
+    toast.innerText = msg;
+    toast.classList.add("show");
+    setTimeout(()=>toast.classList.remove("show"),2000);
+}
+
+let trips =
+JSON.parse(localStorage.getItem("trips")) || [];
+
+if(trips.length){
+    const trip = trips[trips.length-1];
+
+    destination.value = trip.destination;
+    startDate.value = trip.startDate;
+    endDate.value = trip.endDate;
+    budget.value = trip.budget;
+    travelers.value = trip.travelers;
+    transport.value = trip.transport;
+    preference.value = trip.preference;
+}
+
+document.getElementById("editForm")
+.addEventListener("submit",function(e){
+    e.preventDefault();
+
+    if(!trips.length) return;
+
+    trips[trips.length-1] = {
+        ...trips[trips.length-1],
+        destination: destination.value,
+        startDate: startDate.value,
+        endDate: endDate.value,
+        budget: budget.value,
+        travelers: travelers.value,
+        transport: transport.value,
+        preference: preference.value
+    };
+
+    localStorage.setItem("trips", JSON.stringify(trips));
+    localStorage.setItem("selectedDestination", destination.value);
+
+    showToast("Trip updated successfully ✨");
+
+    setTimeout(()=>{
+        window.location.href="dashboard.html";
+    },1000);
+});
+</script>
+
+</body>
+</html>

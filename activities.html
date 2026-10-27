@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Activities</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#f8fafc;color:#111827;}
+.topbar{
+    padding:18px 8%;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.logo{font-size:28px;font-weight:700;}
+.back{
+    text-decoration:none;
+    background:white;
+    color:#111827;
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:600;
+}
+.hero{
+    margin:35px 8%;
+    border-radius:35px;
+    padding:50px;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.hero h1{font-size:48px;margin-bottom:10px;}
+.hero p{font-size:18px;line-height:1.8;}
+.grid{
+    margin:40px 8%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+    gap:25px;
+}
+.card{
+    background:white;
+    border-radius:28px;
+    overflow:hidden;
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+    transition:.3s;
+}
+.card:hover{
+    transform:translateY(-8px);
+}
+.card img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
+.content{
+    padding:22px;
+}
+.content h3{
+    margin-bottom:10px;
+}
+.desc{
+    color:#64748b;
+    line-height:1.8;
+    margin-bottom:15px;
+}
+.bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+.price{
+    font-weight:700;
+    color:#2563eb;
+}
+button{
+    border:none;
+    padding:10px 18px;
+    border-radius:14px;
+    cursor:pointer;
+    color:white;
+    font-weight:600;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+}
+.summary{
+    margin:50px 8%;
+    background:white;
+    border-radius:28px;
+    padding:30px;
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+}
+.summary h2{
+    margin-bottom:18px;
+}
+.selected{
+    color:#64748b;
+    line-height:2;
+}
+.total{
+    margin-top:15px;
+    font-size:22px;
+    font-weight:700;
+    color:#2563eb;
+}
+.empty{
+    margin:80px 8%;
+    text-align:center;
+    color:#64748b;
+    font-size:20px;
+}
+.toast{
+    position:fixed;
+    top:30px;
+    right:30px;
+    background:white;
+    padding:14px 20px;
+    border-radius:14px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    transform:translateX(150%);
+    transition:.4s;
+    z-index:9999;
+}
+.toast.show{
+    transform:translateX(0);
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="topbar">
+    <div class="logo">TripNest</div>
+    <a href="dashboard.html" class="back">Back</a>
+</div>
+
+<section class="hero">
+    <h1 id="title">Activities</h1>
+    <p id="subtitle">Choose unforgettable experiences.</p>
+</section>
+
+<div class="grid" id="grid"></div>
+
+<section class="summary">
+    <h2>Selected Activities</h2>
+    <div class="selected" id="selected">
+        No activities selected yet.
+    </div>
+    <div class="total" id="total">
+        Total: ₹0
+    </div>
+</section>
+
+<div class="empty" id="empty" style="display:none;">
+    Create a trip first to unlock activities ✨
+</div>
+
+<script>
+const toast = document.getElementById("toast");
+
+function showToast(msg){
+    toast.innerText = msg;
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },2000);
+}
+
+const destination =
+localStorage.getItem("selectedDestination");
+
+const grid =
+document.getElementById("grid");
+
+const selectedBox =
+document.getElementById("selected");
+
+const totalBox =
+document.getElementById("total");
+
+let chosen = [];
+let total = 0;
+
+const activities = {
+Goa:[
+{
+name:"Scuba Diving",
+img:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200",
+desc:"Explore underwater beauty and coral life.",
+price:3500
+},
+{
+name:"Parasailing",
+img:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200",
+desc:"Fly above Goa beaches with amazing views.",
+price:2200
+},
+{
+name:"Cruise Dinner",
+img:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=1200",
+desc:"Luxury night cruise with dinner & music.",
+price:4500
+}
+],
+Manali:[
+{
+name:"Skiing",
+img:"https://images.unsplash.com/photo-1517299321609-52687d1bc55a?q=80&w=1200",
+desc:"Snow adventures on beautiful slopes.",
+price:4000
+},
+{
+name:"River Rafting",
+img:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=1200",
+desc:"Exciting river rafting experience.",
+price:2500
+},
+{
+name:"Camping",
+img:"https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200",
+desc:"Bonfire nights under mountain skies.",
+price:1800
+}
+],
+Maldives:[
+{
+name:"Private Yacht Ride",
+img:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200",
+desc:"Luxury ocean cruise with sunset views.",
+price:15000
+},
+{
+name:"Snorkeling",
+img:"https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200",
+desc:"Swim among tropical marine life.",
+price:5000
+},
+{
+name:"Spa Retreat",
+img:"https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1200",
+desc:"Relaxing island spa experience.",
+price:8000
+}
+]
+};
+
+if(!destination){
+    document.getElementById("empty").style.display="block";
+    document.querySelector(".summary").style.display="none";
+}else{
+
+    document.getElementById("title").innerText =
+    `${destination} Activities`;
+
+    document.getElementById("subtitle").innerText =
+    `Top experiences in ${destination}`;
+
+    const list =
+    activities[destination] || [
+        {
+            name:"City Tour",
+            img:"https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200",
+            desc:"Discover the city's highlights.",
+            price:2000
+        }
+    ];
+
+    list.forEach(act=>{
+        grid.innerHTML += `
+            <div class="card">
+                <img src="${act.img}">
+                <div class="content">
+                    <h3>${act.name}</h3>
+                    <div class="desc">${act.desc}</div>
+
+                    <div class="bottom">
+                        <div class="price">₹${act.price}</div>
+                        <button onclick='addActivity(${JSON.stringify(act)})'>
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function addActivity(act){
+    chosen.push(act.name);
+    total += act.price;
+
+    localStorage.setItem(
+        "selectedActivities",
+        JSON.stringify(chosen)
+    );
+
+    localStorage.setItem(
+        "activitiesBudget",
+        total
+    );
+
+    selectedBox.innerHTML =
+    chosen.map(x=>"✓ "+x).join("<br>");
+
+    totalBox.innerText =
+    `Total: ₹${total}`;
+
+    showToast("Activity added ✨");
+}
+</script>
+
+</body>
+</html>

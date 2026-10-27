@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripNest | Transport</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+    background:#f8fafc;
+    color:#111827;
+}
+.topbar{
+    padding:18px 8%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.logo{
+    font-size:28px;
+    font-weight:700;
+}
+.back{
+    text-decoration:none;
+    background:white;
+    color:#111827;
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:600;
+}
+.hero{
+    margin:35px 8%;
+    padding:50px;
+    border-radius:35px;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899,#f97316);
+}
+.hero h1{
+    font-size:48px;
+    margin-bottom:10px;
+}
+.grid{
+    margin:40px 8%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+.card{
+    background:white;
+    border-radius:28px;
+    padding:30px;
+    box-shadow:0 15px 30px rgba(0,0,0,.08);
+    transition:.3s;
+}
+.card:hover{
+    transform:translateY(-8px);
+}
+.icon{
+    width:75px;
+    height:75px;
+    border-radius:22px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:28px;
+    color:white;
+    margin-bottom:20px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+}
+.card h2{
+    margin-bottom:10px;
+}
+.desc{
+    color:#64748b;
+    line-height:1.8;
+    margin-bottom:18px;
+}
+.price{
+    font-size:28px;
+    font-weight:800;
+    color:#2563eb;
+    margin-bottom:15px;
+}
+a.btn{
+    display:inline-block;
+    text-decoration:none;
+    padding:12px 22px;
+    border-radius:14px;
+    color:white;
+    font-weight:600;
+    background:linear-gradient(135deg,#2563eb,#7c3aed,#ec4899);
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="logo">TripNest</div>
+    <a href="dashboard.html" class="back">Back</a>
+</div>
+
+<section class="hero">
+    <h1 id="title">Transport Recommendations</h1>
+    <p id="subtitle">Best ways to reach your destination.</p>
+</section>
+
+<section class="grid" id="grid"></section>
+
+<script>
+const destination =
+localStorage.getItem("selectedDestination") || "Your Destination";
+
+document.getElementById("title").innerText =
+`${destination} Transport Options`;
+
+document.getElementById("subtitle").innerText =
+`Recommended travel options for ${destination}`;
+
+const transport = [
+{
+icon:"fa-plane",
+name:"Flight",
+desc:"Fastest and most convenient for long-distance travel.",
+price:"₹8,500+",
+link:"https://www.makemytrip.com/flights/"
+},
+{
+icon:"fa-train",
+name:"Train",
+desc:"Comfortable scenic travel with budget-friendly fares.",
+price:"₹1,200+",
+link:"https://www.irctc.co.in/"
+},
+{
+icon:"fa-bus",
+name:"Bus",
+desc:"Affordable and accessible transport option.",
+price:"₹700+",
+link:"https://www.redbus.in/"
+},
+{
+icon:"fa-car-side",
+name:"Self Drive",
+desc:"Flexible road trip option for families & groups.",
+price:"₹3,500+",
+link:"https://www.zoomcar.com/"
+}
+];
+
+const grid =
+document.getElementById("grid");
+
+transport.forEach(t=>{
+    grid.innerHTML += `
+        <div class="card">
+            <div class="icon">
+                <i class="fa-solid ${t.icon}"></i>
+            </div>
+
+            <h2>${t.name}</h2>
+
+            <div class="desc">${t.desc}</div>
+
+            <div class="price">${t.price}</div>
+
+            <a class="btn"
+               target="_blank"
+               href="${t.link}">
+               Explore
+            </a>
+        </div>
+    `;
+});
+</script>
+
+</body>
+</html>
